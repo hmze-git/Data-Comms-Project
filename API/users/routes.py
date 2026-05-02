@@ -1,8 +1,10 @@
-from flask_restful import Resource
+from flask_restful import Resource,current_app
 from flask import request
-from Extensions.extensions import db
+from Extensions.extensions import db,minio_client
 from models.userModel import UserModel
+import datetime as dt
 import bcrypt
+import os
 
 class UserCreate(Resource):
     def post(self):
@@ -36,6 +38,7 @@ class UserLogin(Resource):
         
         user=UserModel.query.filter_by(email=data["email"]).first()
 
+        print(user)
         if not user:
             return {"message": "Invalid credentials"},404
 
@@ -47,8 +50,9 @@ class UserLogin(Resource):
 
         
        
-        
-        
+
+
+
 def registerRoutes(api):
     api.add_resource(UserCreate,'/users')
     api.add_resource(UserLogin,'/users/login')
