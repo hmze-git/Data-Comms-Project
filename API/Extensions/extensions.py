@@ -8,7 +8,7 @@ db = SQLAlchemy()
 # setup way to interact with minio
 minio_client=Minio(
 
-    "localhost:9000", # change this wehn docker ot it wont work 
+    "minio:9000", # change this wehn docker ot it wont work 
     access_key="minioadmin", #username
     secret_key="minioadmin",#password
     secure=False # use http set to true for https

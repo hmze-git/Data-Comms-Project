@@ -6,6 +6,6 @@ celery = Celery(
     'celery',
     broker=redis_url,
     backend=redis_url,
+    include=["worker.tasks"]
 )
 
-from . import tasks

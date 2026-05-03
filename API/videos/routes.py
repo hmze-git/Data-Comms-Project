@@ -7,6 +7,8 @@ import datetime as dt
 import bcrypt
 import os
 
+from worker.tasks import tanscode_video
+
 
 class postVideoUser(Resource):
     def post(self):
@@ -66,6 +68,9 @@ class postVideoUser(Resource):
         db.session.commit()
 
         print("Video db rec made ")
+
+        tanscode_video.delay(objKey,new_Video.id,userId)
+
 
         return {"message": "Succesful upload"},200
         

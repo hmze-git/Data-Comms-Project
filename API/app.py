@@ -7,7 +7,7 @@ def create_app():
     app = Flask(__name__)
 
     Upload_Foulder='uploads'
-    app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:Pass@localhost/DBDataComs'
+    app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:Pass@db:3306/dbdatacoms'
     app.config['UPLOAD FOLDER']=Upload_Foulder
     db.init_app(app)
     api = Api(app)
