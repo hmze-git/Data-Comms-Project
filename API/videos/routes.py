@@ -1,13 +1,14 @@
 from flask_restful import Resource,current_app
 from flask import request
 from Extensions.extensions import db,minio_client
-from models.videoModel import VideoModel
+from models.videoModel import VideoModel,UploadStatus
 from models.userModel import UserModel
 import datetime as dt
 import bcrypt
 import os
 
 from worker.tasks import tanscode_video
+
 
 
 class postVideoUser(Resource):
@@ -79,7 +80,23 @@ class postVideoUser(Resource):
    # bucket=db.Column(db.String(150),nullable=False,unique=True)
    # duration=db.Column(db.Integer,nullable=False)
   #  uploaded_by=db.Column(db.String(50),db.ForeignKey('user.id'),nullable=False)
+class getUploadStatus(Resource):
+    def get(self,vidId):
+
+        if not vidId:
+            return{"message":"Missing url param"},500
+        
+        vidStat=VideoModel.query.filter_by(id=vidId).first()
+
+        print(f"What am i {vidStat}")
+        if not vidStat:
+            return{"message":f'Unable to find video stored in db for id {vidId}'},400
+        else:
+            return{"message":"Success",
+                   "vidStatus":f"{vidStat.upload_status}",
+                   "hslpath":f"{vidStat.hslPath}"}
 
 def registerVideoRoutes(api):
 
     api.add_resource(postVideoUser,'/post/video')
+    api.add_resource(getUploadStatus,'/video/<string:vidId>/status')

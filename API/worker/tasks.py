@@ -1,7 +1,11 @@
 from .celery_app import celery #import the established celery connection to reddis 
 from  Extensions.extensions import minio_client
+from models.videoModel import VideoModel
 import os
 import subprocess
+import mysql.connector
+
+
 
 @celery.task 
 def tanscode_video(objKey,vidId,userId):
@@ -24,7 +28,7 @@ def tanscode_video(objKey,vidId,userId):
         result = subprocess.run([
             'ffmpeg',
             '-i',
-            f'{raw_path}.mp4',
+            f'{raw_path}/{vidId}.mp4',
             '-c:v', 'libx264',
             '-c:a', 'aac',
             '-f',
@@ -51,12 +55,46 @@ def tanscode_video(objKey,vidId,userId):
             minio_client.fput_object("videos",storageKey,fpath)
 
 
+        update_vidStatus(vidId,
+                         "processed",
+                         f"users/{userId}/hsl/{vidId}/index.m3u8")
         os.remove(f"{raw_path}/{vidId}.mp4")
         for file in os.listdir(hsl_path):
             os.remove(f"{hsl_path}/{file}")
         os.rmdir(hsl_path)
 
 
-        print("done transcoding to minio yipppeee")
     except Exception as e:
         print(f"transcoding failed {e}")
+        update_vidStatus(vidId,
+                         "failed",
+                         "None")
+
+
+
+def update_vidStatus(vidId,status,hslPath):
+    try:
+
+        #ENV should work but if it doesnt
+        #ORM problems sometimes  so avoid it
+        connection= mysql.connector.connect(
+            host=os.getenv("DB_HOST","db"),
+            port=os.getenv("DB_PORT",3306),
+            user=os.getenv("DB_USER","root"),
+            password=os.getenv("DB_PASS","Pass"),
+            database=os.getenv("DB_NAME","dbdatacoms"),
+        )
+        cursor = connection.cursor()
+
+        cursor.execute(
+            "UPDATE video  SET upload_status=%s, hslPath=%s WHERE id=%s",
+            (status,hslPath,vidId)
+        )
+        connection.commit()
+        connection.close()
+       
+    except Exception as e:
+        print(f'Failed db vid update : {e}')
+
+
+    
