@@ -95,6 +95,8 @@ class getUploadStatus(Resource):
             return{"message":"Success",
                    "vidStatus":f"{vidStat.upload_status}",
                    "hslpath":f"{vidStat.hslPath}"}
+        
+class getVideo
 
 def registerVideoRoutes(api):
 
