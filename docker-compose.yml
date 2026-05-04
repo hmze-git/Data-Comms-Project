@@ -57,6 +57,17 @@ services:
       MINIO_ROOT_PASSWORD: minioadmin
     volumes:
       - minio_data:/data
+  nginx:
+    image: tiangolo/nginx-rtmp:latest-2026-05-04
+    ports:
+      - "80:80"
+    volumes:
+      - ./NGINX/nginx.conf:/etc/nginx/nginx.conf
+   
+  
+
+    
+
    
 
 volumes:
