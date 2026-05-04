@@ -1,5 +1,5 @@
 from flask_restful import Resource,current_app
-from flask import request
+from flask import request,jsonify
 from Extensions.extensions import db,minio_client
 from models.videoModel import VideoModel,UploadStatus
 from models.userModel import UserModel
@@ -96,9 +96,35 @@ class getUploadStatus(Resource):
                    "vidStatus":f"{vidStat.upload_status}",
                    "hslpath":f"{vidStat.hslPath}"}
         
-class getVideo
+class getVideos(Resource):
+    def get(self):
+        pageNum=int(request.args.get("page_num",1))
+        limit=int(request.args.get("limit",10))
+
+        pagination=VideoModel.query.with_entities(VideoModel.id,VideoModel.title,VideoModel.thumbnailPath,VideoModel.upload_date). \
+        filter_by(upload_status="PROCESSED") \
+        .order_by(VideoModel.upload_date.desc()) \
+        .paginate(page=pageNum,per_page=limit,error_out=False)
+
+        results=[{
+            "vidId": v.id,
+            "vidTit": v.title,
+            "vidThumb": f'videos/{v.thumbnailPath}',
+            "vidUpload": v.upload_date
+        }
+            for v in pagination.items
+        ]
+
+        return jsonify({
+            "Success": True,
+            "results": results,
+            "totalRecords":pagination.total,
+
+        })
+        
 
 def registerVideoRoutes(api):
 
     api.add_resource(postVideoUser,'/post/video')
     api.add_resource(getUploadStatus,'/video/<string:vidId>/status')
+    api.add_resource(getVideos,"/post/video/getVideos")

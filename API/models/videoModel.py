@@ -20,5 +20,6 @@ class VideoModel(db.Model):
     uploaded_by=db.Column(db.String(50),db.ForeignKey('user.id'),nullable=False)
     upload_status=db.Column(db.Enum(UploadStatus),default=UploadStatus.PROCESSING)
     hslPath=db.Column(db.String(500),nullable=True)
+    thumbnailPath=db.Column(db.String(500),nullable=True)
     def __repr__(self):
         return f"videos('{self.id}','{self.title}','{self.description}','{self.Fpath}','{self.duration}')"

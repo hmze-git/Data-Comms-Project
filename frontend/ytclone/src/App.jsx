@@ -4,13 +4,13 @@ import { Navigate } from "react-router-dom"
 import Home from "./pages/home"
 
 function App() {
-  const [count, setCount] = useState(0)
+
 
   return (
     <Routes>
-      <Route path="/" element={Page_layout}>  
+      <Route path="/" element={<Pagelayout/>}>  
       <Route index element={<Navigate to="home" replace />}></Route>
-      <Route path="home" element={Home}/>
+      <Route path="home" element={<Home/>}/>
 
 
       </Route>

@@ -15,9 +15,11 @@ def tanscode_video(objKey,vidId,userId):
         tmp_dir= "/tmp"
         raw_path=f"{tmp_dir}/raw"
         hsl_path=f"{tmp_dir}/hsl/{vidId}"
+        thumb_path=f"{tmp_dir}/thumbnail/{vidId}"
 
         os.makedirs(raw_path,exist_ok=True)
         os.makedirs(hsl_path,exist_ok=True)
+        os.makedirs(thumb_path,exist_ok=True)
 
     
     #minio Fget bucketname,files name in minio,where to save once pulled
@@ -44,9 +46,23 @@ def tanscode_video(objKey,vidId,userId):
             f'{hsl_path}/index.m3u8'
             
             ],capture_output=True,text=True)
+        print("made it to thumbnail gen")
+        thumbnail= subprocess.run([ 
+            'ffmpeg',
+            '-i',
+            f'{raw_path}/{vidId}.mp4',
+            '-vf',
+            'thumbnail',
+            '-frames:v',
+            '1',
+            f"{thumb_path}/thumb.jpg",
+            ],capture_output=True,text=True)
         
-        if result.returncode !=0:
+        if result.returncode !=0 :
             raise Exception(f"FFmpeg fail: {result.stderr}")
+         
+        if thumbnail.returncode !=0 :
+            raise Exception(f" THumbnail FFmpeg fail: {thumbnail.stderr}")
         
         for filenames in os.listdir(hsl_path):
         # Fput bucketname, object name(what to save it as), which file to send
@@ -54,11 +70,13 @@ def tanscode_video(objKey,vidId,userId):
             storageKey=f"users/{userId}/hsl/{vidId}/{filenames}"
             minio_client.fput_object("videos",storageKey,fpath)
 
-
+        minio_client.fput_object("videos",f"users/{userId}/thumbnail/{vidId}/thumb.jpg",f"{thumb_path}/thumb.jpg")
         update_vidStatus(vidId,
                          "processed",
-                         f"users/{userId}/hsl/{vidId}/index.m3u8")
+                         f"users/{userId}/hsl/{vidId}/index.m3u8",f"users/{userId}/thumbnail/{vidId}/thumb.jpg")
+
         os.remove(f"{raw_path}/{vidId}.mp4")
+
         for file in os.listdir(hsl_path):
             os.remove(f"{hsl_path}/{file}")
         os.rmdir(hsl_path)
@@ -68,11 +86,11 @@ def tanscode_video(objKey,vidId,userId):
         print(f"transcoding failed {e}")
         update_vidStatus(vidId,
                          "failed",
-                         "None")
+                         "None","None")
 
 
 
-def update_vidStatus(vidId,status,hslPath):
+def update_vidStatus(vidId,status,hslPath,thumbPath):
     try:
 
         #ENV should work but if it doesnt
@@ -87,8 +105,8 @@ def update_vidStatus(vidId,status,hslPath):
         cursor = connection.cursor()
 
         cursor.execute(
-            "UPDATE video  SET upload_status=%s, hslPath=%s WHERE id=%s",
-            (status,hslPath,vidId)
+            "UPDATE video  SET upload_status=%s, hslPath=%s, thumbnailPath=%s WHERE id=%s ",
+            (status,hslPath,thumbPath,vidId)
         )
         connection.commit()
         connection.close()

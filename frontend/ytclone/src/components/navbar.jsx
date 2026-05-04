@@ -6,26 +6,23 @@ const Navbar=()=>{
 
 
 
-
-
-
     return(
 
-    <header class="header">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-2">
-                    <div class="header__logo">
+    <div className="header">
+        <div className="container">
+            <div className="row">
+                <div className="col">
+                    <div className="header__logo">
                         <a href="./index.html">
-                            <image src="img/logo.png" alt=""/>
+                            <b>Priavate media</b>
                         </a>
                     </div>
                 </div>
-                <div class="col-lg-8">
-                    <div class="header__nav">
-                        <nav class="header__menu mobile-menu">
+                <div className="col-lg-8">
+                    <div className="header__nav">
+                        <nav className="header__menu mobile-menu">
                             <ul>
-                                <li class="active"><a href="./index.html">Homepage</a></li>
+                                <li className="active"><a href="./index.html">Homepage</a></li>
                                 <li><a href="./categories.html">Livesteams</a>  </li>                              
                                 <li><a href="./blog.html">Upload Video</a></li>
         
@@ -33,16 +30,16 @@ const Navbar=()=>{
                         </nav>
                     </div>
                 </div>
-                <div class="col-lg-2">
-                    <div class="header__right">
-                        <a href="#" class="search-switch"><span class="icon_search"></span></a>
-                        <a href="./login.html"><span class="icon_profile"></span></a>
+                <div className="col-lg-2">
+                    <div className="header__right">
+                        <a href="#" className="search-switch"><span className="icon_search"></span></a>
+                        <a href="./login.html"><span className="icon_profile"></span></a>
                     </div>
                 </div>
             </div>
             <div id="mobile-menu-wrap"></div>
         </div>
-    </header>
+    </div>
    
 
     );

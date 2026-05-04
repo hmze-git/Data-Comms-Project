@@ -6,32 +6,32 @@ const Home = ()=>{
 
     
 return(
-    <section class="product spad">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8">
-                    <div class="trending__product">
-                        <div class="row">
-                            <div class="col-lg-8 col-md-8 col-sm-8">
-                                <div class="section-title">
+    <div className="product spad">
+        <div className="container">
+            <div className="row">
+                <div className="col-lg-8">
+                    <div className="trending__product">
+                        <div className="row">
+                            <div className="col-lg-8 col-md-8 col-sm-8">
+                                <div className="section-title">
                                     <h4>Trending Now</h4>
                                 </div>
                             </div>
-                            <div class="col-lg-4 col-md-4 col-sm-4">
-                                <div class="btn__all">
-                                    <a href="#" class="primary-btn">View All <span class="arrow_right"></span></a>
+                            <div className="col-lg-4 col-md-4 col-sm-4">
+                                <div className="btn__all">
+                                    <a href="#" className="primary-btn">View All <span className="arrow_right"></span></a>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-lg-4 col-md-6 col-sm-6">
-                                <div class="product__item">
-                                    <div class="product__item__pic set-bg" data-setbg="img/trending/trend-1.jpg">
-                                        <div class="ep">18 / 18</div>
-                                        <div class="comment"><i class="fa fa-comments"></i> 11</div>
-                                        <div class="view"><i class="fa fa-eye"></i> 9141</div>
+                        <div className="row">
+                            <div className="col-lg-4 col-md-6 col-sm-6">
+                                <div className="product__item">
+                                    <div className="product__item__pic set-bg" data-setbg="img/trending/trend-1.jpg">
+                                        <div className="ep">18 / 18</div>
+                                        <div className="comment"><i className="fa fa-comments"></i> 11</div>
+                                        <div className="view"><i className="fa fa-eye"></i> 9141</div>
                                     </div>
-                                    <div class="product__item__text">
+                                    <div className="product__item__text">
                                         <ul>
                                             <li>Active</li>
                                             <li>Movie</li>
@@ -46,10 +46,10 @@ return(
             
             </div>
         </div>
-    </section>
+    </div>
 
     
 )
 
 };
-export default Homereturn();
+export default Home;
