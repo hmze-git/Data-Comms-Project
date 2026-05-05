@@ -97,6 +97,8 @@ class getUploadStatus(Resource):
                    "hslpath":f"{vidStat.hslPath}"}
         
 class getVideos(Resource):
+
+
     def get(self):
         pageNum=int(request.args.get("page_num",1))
         limit=int(request.args.get("limit",10))
@@ -122,9 +124,39 @@ class getVideos(Resource):
 
         })
         
+class getVideo(Resource):
+    def get(self,vidId):
+        if not vidId:
+            return{"message":"Missing url param for vid id"},500
+        vidDetails=VideoModel.query.filter_by(id=vidId).first()
+
+       
+        if not vidDetails:
+            return{"message":f"Video for id {vidId} not found"},404
+        else:
+            
+            uploaderUName= vidDetails.uploader.userName
+            uploaderId= vidDetails.uploader.id
+
+            return  {
+                "Success":True,
+                "videoDetails":{
+                    "id": vidDetails.id,
+                    "title":vidDetails.title,
+                    "description":vidDetails.description,
+                    "uploadDate":str(vidDetails.upload_date),
+                    "hslPath": f"/videos/{vidDetails.hslPath}",
+                },
+                "Uploader":{
+                    "username":uploaderUName,
+                    "userId":uploaderId
+                }                
+            },200
+        
 
 def registerVideoRoutes(api):
 
     api.add_resource(postVideoUser,'/post/video')
     api.add_resource(getUploadStatus,'/video/<string:vidId>/status')
     api.add_resource(getVideos,"/post/video/getVideos")
+    api.add_resource(getVideo,"/post/video/getVideos/<string:vidId>")
