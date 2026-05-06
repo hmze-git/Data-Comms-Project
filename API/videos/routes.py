@@ -31,7 +31,7 @@ class postVideoUser(Resource):
 
         file = request.files.get("file")
         userId = request.form.get("userId")
-        vidTit = request.form.get("title")
+        vidTitle = request.form.get("title")
         vidDes= request.form.get("description")
 
         user =UserModel.query.filter_by(id=userId).first()
@@ -57,7 +57,7 @@ class postVideoUser(Resource):
  
         # store in db
         new_Video= VideoModel(
-            title=vidTit,
+            title=vidTitle,
             description=vidDes,
             upload_date=now,
             Fpath=objKey,
@@ -110,7 +110,7 @@ class getVideos(Resource):
 
         results=[{
             "vidId": v.id,
-            "vidTit": v.title,
+            "vidTitle": v.title,
             "vidThumb": f'videos/{v.thumbnailPath}',
             "vidUpload": v.upload_date
         }

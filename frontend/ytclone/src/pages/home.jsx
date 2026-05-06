@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import VidCard from "../components/vidCard";
 
 import api from "../services/api";
 
@@ -12,7 +13,7 @@ const Home = ()=>{
     const LIMIT =9
     
 
-    useEffect(()=>{
+    useEffect( ()=>{
         const fetchData= async()=>{
 
             try {
@@ -24,9 +25,9 @@ const Home = ()=>{
 
                 const response=await api.get(url,{params})
 
-
+ 
                 if (response.data.Success===true){
-                    setVideoMetaData(...response.data.results)
+                    setVideoMetaData([...response.data.results])
                     setTotalRecords(response.data.totalRecords)
                     console.log("Records loaded succesfully",response.data.results)
 
@@ -39,7 +40,7 @@ const Home = ()=>{
 
         }
 
-        fetchData()
+         fetchData()
     },[currPage,pageCount])
 
 return(
@@ -61,21 +62,11 @@ return(
                             </div>
                         </div>
                         <div className="row">
-                            <div className="col-lg-4 col-md-6 col-sm-6">
-                                <div className="product__item">
-                                    <div className="product__item__pic set-bg" data-setbg="img/trending/trend-1.jpg">
-                                        <div className="comment"><i className="fa fa-comments"></i> 11</div>
-                                        <div className="view"><i className="fa fa-eye"></i> 9141</div>
-                                    </div>
-                                    <div className="product__item__text">
-                                        <ul>
-                                            <li>Active</li>
-                                            <li>Movie</li>
-                                        </ul>
-                                        <h5 style={{color:"white"}}><b>The Seven Deadly Sins: Wrath of the Gods</b></h5>
-                                    </div>
-                                </div>
-                            </div>   
+
+                            {videoMetaData.map((vidMeta)=>
+                                <VidCard vidThumb={vidMeta.vidThumb} vidTitle={vidMeta.vidTitle} vidId={vidMeta.vidId} vidUpDate={vidMeta.vidUpload} />
+                            )}
+                          
                                         
                         </div>
                     </div>            

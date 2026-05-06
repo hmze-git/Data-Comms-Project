@@ -1,7 +1,9 @@
 import axios from "axios";
+import {MEDIA_URL} from "../services/mediaURL"
+
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: `${MEDIA_URL}/api/`,
 });
 
 export default api;
