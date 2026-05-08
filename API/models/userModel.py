@@ -12,6 +12,7 @@ class UserModel(db.Model):
 
 
     videos= db.relationship('VideoModel',backref='uploader',lazy=True)
+    streams= db.relationship('StreamModel',backref='streamer',lazy=True)
     def __repr__(self):
         return f"UserModel('{self.id}','{self.userName}','{self.email}','{self.password}')"
     

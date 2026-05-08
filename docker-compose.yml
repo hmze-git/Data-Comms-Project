@@ -58,11 +58,14 @@ services:
     volumes:
       - minio_data:/data
   nginx:
-    image: tiangolo/nginx-rtmp:latest-2026-05-04
+   
+    build: ./NGINX
     ports:
       - "80:80"
+      - "1935:1935"
     volumes:
       - ./NGINX/nginx.conf:/etc/nginx/nginx.conf
+      - ./hls:/tmp/hls
     depends_on:
       - api
       - minio

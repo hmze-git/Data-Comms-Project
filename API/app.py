@@ -17,8 +17,10 @@ def create_app():
     #blueprints
     from users.routes import registerRoutes
     from videos.routes import registerVideoRoutes
+    from streams.routes import registerStreamRoutes
     registerRoutes(api)
     registerVideoRoutes(api)
+    registerStreamRoutes(api)
     
     print("Routes registered")        # add this
     print(app.url_map)   
