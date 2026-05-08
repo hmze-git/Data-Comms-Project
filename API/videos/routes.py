@@ -1,11 +1,10 @@
 from flask_restful import Resource,current_app
-from flask import request,jsonify
+from flask import request
 from Extensions.extensions import db,minio_client
-from models.videoModel import VideoModel,UploadStatus
+from models.videoModel import VideoModel
 from models.userModel import UserModel
 import datetime as dt
-import bcrypt
-import os
+
 
 from worker.tasks import tanscode_video
 
@@ -117,12 +116,12 @@ class getVideos(Resource):
             for v in pagination.items
         ]
 
-        return jsonify({
+        return {
             "Success": True,
             "results": results,
             "totalRecords":pagination.total,
 
-        })
+        },200
         
 class getVideo(Resource):
     def get(self,vidId):

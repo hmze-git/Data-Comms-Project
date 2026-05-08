@@ -1,5 +1,5 @@
 from flask_restful import Resource
-from flask import request
+from flask import request,jsonify
 from Extensions.extensions import db
 from models.streamModel import StreamModel,StreamStatus
 from models.userModel import UserModel
@@ -48,7 +48,66 @@ class endStream(Resource):
           return({"Success":False,"message": f"Unable to update stream for ID {streamKey}"}),400
 
 
+class getStreams(Resource):
+    def get(self):
+        pageNum=int(request.args.get("page_num",1))
+        limit=int(request.args.get("limit",10))
+
+
+        streams = StreamModel.query.filter_by(status=StreamStatus.ACTIVE)\
+            .paginate(page=pageNum,per_page=limit,error_out=False)
+        
+
+        results =[{
+            "streamTitle": stream.title,
+            "streamKey": stream.key,
+            "streamer": stream.streamer.userName,
+
+        }
+        for stream in streams
+        ]
+
+    
+        return {
+            "Success": True,
+            "results": results,
+            "totalRecords":streams.total,
+
+        },200
+class getStream(Resource):
+    def get(self,streamKey):
+
+        stream = StreamModel.query.filter_by(key=streamKey).first()
+
+        if not stream:
+            return {"success":False,"Message":f"Unable to lovate stream for key {streamKey}"},404
+
+    # must change when deploying on live system
+        streamUrl = f"http://localhost/live/{stream.key}"
+
+        return {"Success":True,"Title":stream.title,"urlLiveVid":streamUrl,"streamer":stream.streamer.userName},200
+    
+class startStream(Resource):
+   def post(self,streamKey):
+        try:
+
+
+            stream= StreamModel.query.filter_by(key=streamKey).first()
+
+            if not stream:
+              return({"Success":False,"message": f"Unable to locate valid stream for id {streamKey}"}),404
+        
+            stream.status =StreamStatus.ACTIVE
+            db.session.commit()
+            return({"Success":True,"message": f"Succesfully updated stream for ID {streamKey}"}),404
+        except Exception as e:
+          return({"Success":False,"message": f"Unable to update stream for ID {streamKey}; error {e}"}),400
+
+
 def registerStreamRoutes(api):
 
     api.add_resource(createStreamKey,'/stream/create')
     api.add_resource(endStream,"/stream/<string:streamKey>/end")
+    api.add_resource(startStream,"/stream/<string:streamKey>/start")
+    api.add_resource(getStreams,"/stream/active")
+    api.add_resource(getStream,"/stream/<string:streamKey>")
