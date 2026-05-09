@@ -12,12 +12,13 @@ const VideoUpload = ()=>{
     const [file, setFile] = useState();
     const [description, setDescription] = useState("");
     const [uploadComplete,setUploadComplete]=useState(false);
-    const [vidId,setVidId]=useState("")
     const [isUploaded,setIsUploaded]= useState(false)
 
     const userId = user?.id;
     
     
+    
+
 
     const handleTitleChange = (e) => {
     setTitle(e.target.value);
@@ -39,11 +40,60 @@ const VideoUpload = ()=>{
     e.preventDefault();
 
     try {
+     
+        Swal.fire({
+            title:"Uploading Video",
+            text:"Please Wait While Your Video Is Processed",
+            allowOutsideClick:false,
+            allowEscapeKey:false,
+            didOpen:()=>{
+                Swal.showLoading()
+            }
+        })
       const data = await uploadVid();
       if (data.success) {
-        setVidId(data.vidId);
+        
+        const vID = data.vidId
+       
+    
+
+        const interval = setInterval(async () => {
+             try {
+                const stat= await api.get(`/video/${vID}/status`);
+
+                console.log(stat.data)
+            if( stat.data.status.toLowerCase()==="processed"){
+                clearInterval(interval)
+                Swal.fire({
+                    title:"Video Upload Succesful",
+                    icon:"success",
+                    
+                })
+            }else if( stat.data.status.toLowerCase()==="failed"){
+                clearInterval(interval)
+                Swal.fire({
+                    title:"Video Upload Failed",
+                    icon:"error",
+                    text:"Error Uploading the video",
+                    
+                })
+            }
+             } catch (error) {
+                clearInterval(interval)
+                console.log(error)
+             }
+
+        }, 5000);
+
       } else {
-        console.log("failed upload vid");
+        
+        Swal.fire({
+            title:"Failure during Upload",
+            text:"Try Again Later",
+            icon:"error",
+            
+        })
+        
       }
     } catch (error) {
         console.log("REG FAIL ",error); 

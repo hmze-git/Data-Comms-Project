@@ -1,31 +1,32 @@
 import React, { useEffect, useState,u } from "react";
 import ReactHlsPlayer from "react-hls-video-player"
 import api from "../services/api";
-import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import {MEDIA_URL} from "../services/mediaURL"
 
 
 const StreamPlayer = () => {
 
-const [videoData, setVideoData] = useState({})
-const [userDetails,setUserDetails]= useState({})
+const [streamData, setStreamData] = useState({})
+const [streamerDetails,setStreamerDetails]= useState("")
 
 const BASE_URL= window.location.origin
-const location = useLocation()
-const vidId= location.state?.vId
+const {streamKey}= useParams()
 
 
 useEffect(()=>{
 
 
-    const fetchVidData = async ()=>{
+    const fetchStreamData = async ()=>{
 
         try {
-            const response = await api.get(`/post/video/getVideos/${vidId}`)
+            const response = await api.get(`/stream/${streamKey}`)
 
             if (response.data.Success ===true){
-                 setVideoData({...response.data.videoDetails})
-                setUserDetails({...response.data.Uploader})
+                setStreamData({...response.data})
+                setStreamerDetails({...response.data.streamer})
+
+                console.log( `${MEDIA_URL}${response.data.urlLiveVid}`)
             }
         } catch (error) {
                 console.log("Failed gettign player details")
@@ -34,9 +35,10 @@ useEffect(()=>{
 
 
     }
-     fetchVidData()
+     fetchStreamData()
 
-},[vidId])
+
+},[streamKey])
 
 
 
@@ -50,7 +52,7 @@ useEffect(()=>{
                             <ReactHlsPlayer
 
                                 src={
-                                        !!videoData ? `${MEDIA_URL}${videoData.hslPath}` : ""
+                                        !!streamData ? `${MEDIA_URL}${streamData.urlLiveVid}` : ""
 
                                 }
                                 autoPlay={false}

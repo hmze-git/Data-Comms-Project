@@ -25,7 +25,8 @@ const Navbar=()=>{
                             <ul>
                                 <li > <Link to="/" >Home</Link></li>
                                 <li> <Link to="/upload/Video" >Upload Video</Link></li>                              
-                                <li><Link to="/streams">Streaming</Link></li>
+                                <li><Link to="/streams/active">Streaming</Link></li>
+                               
         
                             </ul>
                         </nav>

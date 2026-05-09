@@ -89,11 +89,12 @@ class getUploadStatus(Resource):
 
         print(f"What am i {vidStat}")
         if not vidStat:
-            return{"message":f'Unable to find video stored in db for id {vidId}'},400
-        elif vidStat.staus==UploadStatus.PROCESSED:
+            return{"success":False,"message":f'Unable to find video stored in db for id {vidId}'},400
+        else:
             return{
-                    "success":True,         
-                    "message":"Uploaded Succesfully",
+                    "success":True,
+                    "status": vidStat.upload_status.value,         
+                    "message":"Uploading",
             }
         
 class getVideos(Resource):

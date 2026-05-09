@@ -83,7 +83,7 @@ class getStream(Resource):
             return {"success":False,"Message":f"Unable to lovate stream for key {streamKey}"},404
 
     # must change when deploying on live system
-        streamUrl = f"http://localhost/live/{stream.key}"
+        streamUrl = f"/live/{stream.key}.m3u8"
 
         return {"Success":True,"Title":stream.title,"urlLiveVid":streamUrl,"streamer":stream.streamer.userName},200
     
