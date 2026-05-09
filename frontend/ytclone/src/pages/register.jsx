@@ -1,13 +1,15 @@
 import { useContext,useState } from "react"
 import AuthContext from "../context/authContext"
 import { Link, useNavigate } from "react-router-dom"
+import api from "../services/api";
 
 
-const Login = ()=>{
+const Register = ()=>{
 
-    const { login } = useContext(AuthContext);
+   
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [userName, setUserName] = useState("");
     let navigation = useNavigate();
     
 
@@ -20,20 +22,47 @@ const Login = ()=>{
     setPassword(e.target.value);
   };
 
+  
+
+  const handleUserNameChange = (e) => {
+    setUserName(e.target.value);
+  };
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const data = await login(email, password);
+      const data = await register(email, password);
       if (data.success) {
-        navigation("/home", { replace: true });
+        navigation("/auth/login", { replace: true });
       } else {
-        console.log("failed login again ffs");
+        console.log("failed register");
       }
     } catch (error) {
-        console.log(error); 
+        console.log("REG FAIL ",error); 
     }
   };
+
+  const register =async ()=>{
+
+    try {
+         const userDetails = {
+                userName:userName,
+                email:email,
+                password:password,
+
+            }
+        const resp = await api.post("/users/register",userDetails)
+
+            return resp.data
+    } catch (error) {
+        console.log("ERR in Reg due to ",error )
+    }
+
+
+
+  }
 
   return(
 
@@ -42,7 +71,7 @@ const Login = ()=>{
             <div class="row">
                 <div class="col-lg-6">
                     <div class="login__form">
-                        <h3>Login</h3>
+                        <h3>Register</h3>
                         <form  onSubmit={handleSubmit}>
                             <div class="input__item">
                                 <input type="text" placeholder="Email address" 
@@ -52,6 +81,14 @@ const Login = ()=>{
                                 />
                                 <span class="icon_mail"></span>
                             </div>
+                             <div class="input__item">
+                                <input type="text" placeholder="Username" 
+                                onChange={handleUserNameChange}
+                                required={true}
+                                
+                                />
+                                <span class="icon_profile"></span>
+                            </div>
                             <div class="input__item">
                                 <input type="password" 
                                 placeholder="Password"
@@ -60,15 +97,16 @@ const Login = ()=>{
                                 />
                                 <span class="icon_lock"></span>
                             </div>
-                            <button type="submit" class="site-btn" >Login Now</button>
+                           
+                            <button type="submit" class="site-btn" >Register Now</button>
                         </form>
                     
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="login__register">
-                        <h3>Dont’t Have An Account?</h3>
-                        <Link to="/auth/register" replace={true} class="primary-btn">Register Now</Link>
+                        <h3>Already Registered?</h3>
+                        <Link to="/auth/login" class="primary-btn">Login Here</Link>
                     </div>
                 </div>
             </div>
@@ -79,4 +117,4 @@ const Login = ()=>{
   )
 
 }
-export default Login
+export default Register

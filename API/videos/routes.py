@@ -1,7 +1,7 @@
 from flask_restful import Resource,current_app
 from flask import request
 from Extensions.extensions import db,minio_client
-from models.videoModel import VideoModel
+from models.videoModel import VideoModel,UploadStatus
 from models.userModel import UserModel
 import datetime as dt
 
@@ -72,7 +72,7 @@ class postVideoUser(Resource):
         tanscode_video.delay(objKey,new_Video.id,userId)
 
 
-        return {"message": "Succesful upload"},200
+        return {"success":True,"message": "Succesful upload","vidId":new_Video.id},200
         
         #  upload_date=db.Column(db.Date,nullable=False)
   #  Fpath=db.Column(db.String(500),nullable=False) # not the minio fpathj but key 
@@ -90,10 +90,11 @@ class getUploadStatus(Resource):
         print(f"What am i {vidStat}")
         if not vidStat:
             return{"message":f'Unable to find video stored in db for id {vidId}'},400
-        else:
-            return{"message":"Success",
-                   "vidStatus":f"{vidStat.upload_status}",
-                   "hslpath":f"{vidStat.hslPath}"}
+        elif vidStat.staus==UploadStatus.PROCESSED:
+            return{
+                    "success":True,         
+                    "message":"Uploaded Succesfully",
+            }
         
 class getVideos(Resource):
 
@@ -111,7 +112,7 @@ class getVideos(Resource):
             "vidId": v.id,
             "vidTitle": v.title,
             "vidThumb": f'videos/{v.thumbnailPath}',
-            "vidUpload": v.upload_date
+            "vidUpload": v.upload_date.isoformat()
         }
             for v in pagination.items
         ]

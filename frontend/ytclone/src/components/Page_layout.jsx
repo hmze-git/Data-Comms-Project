@@ -1,10 +1,22 @@
-import React from "react";
-import { Outlet } from "react-router-dom";
+import React, { useEffect,useContext } from "react";
+
+import { Outlet,replace,useNavigate } from "react-router-dom";
 import Navbar from "./navbar";
+import AuthContext from "../context/authContext";
 
 const Pagelayout = ()=>{
 
 
+    const { isLoggedIn, isLoading,user } = useContext(AuthContext); //loading status updated in the authentication provider on reload
+    let navigation = useNavigate();
+
+    useEffect(()=>{
+
+        if(!isLoggedIn && !isLoading || !user ){
+            navigation("auth/login",{replace:true})
+        }
+
+    },[isLoading,isLoggedIn])
 
     return(
 

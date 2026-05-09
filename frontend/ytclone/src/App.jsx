@@ -3,21 +3,32 @@ import Pagelayout from "./components/Page_layout"
 import { Navigate } from "react-router-dom"
 import Home from "./pages/home"
 import VideoPlayer from "./pages/videoPlayer"
+import Login from "./pages/login"
+import Register from "./pages/register"
+import AuthProvider from "./context/authProvider"
+import VideoUpload from "./pages/videoUpload"
 
 function App() {
 
 
   return (
+    <AuthProvider>
     <Routes>
       <Route path="/" element={<Pagelayout/>}>  
       <Route index element={<Navigate to="home" replace />}></Route>
       <Route path="home" element={<Home/>}/>
       <Route path="VidPlayer/:vId" element={<VideoPlayer/>}/>
+      <Route path="upload/Video" element={<VideoUpload/>}/>
 
+
+
+      <Route path="auth/login" element={<Login />}></Route>
+      <Route path="auth/register" element={<Register />}></Route>
 
       </Route>
 
     </Routes>
+    </AuthProvider>
   )
 }
 

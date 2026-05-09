@@ -1722,6 +1722,42 @@ ol {
 /*---------------------
   Login
 -----------------------*/
+.description__item textarea {
+    width: 100%;
+    font-size: 15px;
+    color: #b7b7b7;
+    padding-left: 20px;
+    padding-top: 12px;
+	margin-bottom: 30px;
+    height: 110px;
+    border: none;
+    border-radius: 0;
+    resize: vertical;
+    box-sizing: border-box;
+    display: block;
+}
+
+.input__item--file:before {
+    display: none; /* remove the divider line for file row */
+}
+.input__item--file label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 50px;
+    width: 100%;
+    background: #ffffff;
+    cursor: pointer;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+.input__item--file label span {
+    font-size: 15px;
+    color: #b7b7b7;
+}
+.input__item--file input[type="file"] {
+    display: none;
+}
 
 .login {
 	padding-top: 130px;
@@ -1752,7 +1788,7 @@ ol {
 
 .login__form form .input__item {
 	position: relative;
-	width: 370px;
+	width: 100%;
 	margin-bottom: 20px;
 }
 

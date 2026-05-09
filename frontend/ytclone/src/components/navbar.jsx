@@ -1,4 +1,5 @@
 import React from "react"
+import { Link } from "react-router-dom";
 
 const Navbar=()=>{
 
@@ -22,9 +23,9 @@ const Navbar=()=>{
                     <div className="header__nav">
                         <nav className="header__menu mobile-menu">
                             <ul>
-                                <li className="active"><a href="./index.html">Homepage</a></li>
-                                <li><a href="./categories.html">Livesteams</a>  </li>                              
-                                <li><a href="./blog.html">Upload Video</a></li>
+                                <li > <Link to="/" >Home</Link></li>
+                                <li> <Link to="/upload/Video" >Upload Video</Link></li>                              
+                                <li><Link to="/streams">Streaming</Link></li>
         
                             </ul>
                         </nav>

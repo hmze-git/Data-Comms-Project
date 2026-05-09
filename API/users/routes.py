@@ -13,10 +13,10 @@ class UserCreate(Resource):
         print("get")
 
         if UserModel.query.filter_by(userName=data['userName']).first():
-            return {"message": "User already exists"}, 400
+            return {"success":False,"message": "User already exists"}, 400
             
         if UserModel.query.filter_by(email=data['email']).first():
-            return {"message": "Email already exists"}, 400
+            return {"success":False,"message": "Email already exists"}, 400
 
         hashed_password = bcrypt.hashpw(data['password'].encode('utf-8'), bcrypt.gensalt())
         new_user = UserModel(
@@ -27,7 +27,7 @@ class UserCreate(Resource):
         db.session.add(new_user)
         db.session.commit()
 
-        return {"message": "User registered successfully"}, 200
+        return {"success":True,"message": "User registered successfully"}, 200
 
 class UserLogin(Resource):
     def post(self):
@@ -40,13 +40,19 @@ class UserLogin(Resource):
 
         print(user)
         if not user:
-            return {"message": "Invalid credentials"},404
+            return {"success":False,"message": "Invalid credentials"},404
 
         if bcrypt.checkpw(data["password"].encode("utf-8"),user.password.encode("utf-8")):
-            return {"message": "Login Succesful"},200
+
+            userDet={
+                "id":user.id,
+                "username":user.userName,
+                "email":user.email}
+
+            return {"success":True,"message": "Login Succesful","userDetails":userDet},200
         
         else:
-            return {"message": "Invalid credentials"},404
+            return {"success":False,"message": "Invalid credentials"},404
 
         
        
@@ -54,5 +60,5 @@ class UserLogin(Resource):
 
 
 def registerRoutes(api):
-    api.add_resource(UserCreate,'/users')
+    api.add_resource(UserCreate,'/users/register')
     api.add_resource(UserLogin,'/users/login')
