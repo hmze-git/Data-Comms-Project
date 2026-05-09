@@ -26,9 +26,9 @@ class createStreamKey(Resource):
             db.session.add(newStream)
             db.session.commit()
 
-            return({"Success":True,"StreamKey":newStream.key})
+            return({"success":True,"StreamKey":newStream.key,"streamURL":"rtmp://localhost/live"})
         except Exception as e:
-            return({"Success":False,"Message":f"Failed to create stream key due to {e}"})
+            return({"success":False,"Message":f"Failed to create stream key due to {e}"})
 
 class endStream(Resource):
     def post(self,streamKey):

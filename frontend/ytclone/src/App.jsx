@@ -9,6 +9,7 @@ import AuthProvider from "./context/authProvider"
 import VideoUpload from "./pages/videoUpload"
 import ActiveStreams from "./pages/activeStreams"
 import StreamPlayer from "./pages/streamPlayer"
+import CreateStreams from "./pages/createStream"
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
       <Route path="upload/Video" element={<VideoUpload/>}/>
       <Route path="streams/active" element={<ActiveStreams/>}/>
       <Route path="streams/watch/:streamKey" element={<StreamPlayer/>}/>
+      <Route path="streams/create" element={<CreateStreams/>}/>
 
 
 

@@ -10,7 +10,7 @@ const VidCard = ({ vidThumb, vidTitle, vidId, vidUpDate }) => {
 
    
         <div className="col-lg-5 col-md-8 col-sm-6">
-                 <Link to={`/VidPlayer/${vidId}`} state={{vId:vidId}}>
+                 <Link to={`/VidPlayer/${vidId}`} state={{vId:vidId,vidTitle:vidTitle,vidUpDate:vidUpDate}}>
             <div className="product__item">
                 <div className="product__item__pic set-bg" >
                     <img  

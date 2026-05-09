@@ -71,6 +71,7 @@ const ActiveStreams = ()=>{
 
     }
 
+
 return(
     <div class="anime-details spad">
         <div class="container">
@@ -88,11 +89,14 @@ return(
                         </div>
                         <div class="anime__details__form">
                             <div class="section-title">
-                                <h5>Go Live Now</h5>
+
+                               <Link to={"/streams/create"}> 
+                                <h3 style={{backgroundColor:"red"}}>Go Live Now</h3>
+                                </Link>
                             </div>
-                            <form >           
-                                <button type="submit"><i class="fa fa-location-arrow"></i> Go Live</button>
-                            </form>
+                             
+                  
+                            
                         </div>
                     </div>
                  

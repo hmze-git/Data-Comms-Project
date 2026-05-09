@@ -13,6 +13,8 @@ const [userDetails,setUserDetails]= useState({})
 const BASE_URL= window.location.origin
 const location = useLocation()
 const vidId= location.state?.vId
+const vidTitle= location.state?.vidTitle
+const vidUpDate= location.state?.vId
 
 
 useEffect(()=>{
@@ -67,20 +69,18 @@ useEffect(()=>{
                     <div class="col-lg-8">
                         <div class="anime__details__review">
                             <div class="section-title">
-                                <h5>Reviews</h5>
+                                <h5>{vidTitle}              by: {userDetails?.username}</h5>
                             </div>
                             <div class="anime__review__item">
-                                <div class="anime__review__item__pic">
-                                    <img src="img/anime/review-1.jpg" alt="" />
-                                </div>
+                                <h5>{userDetails?.username}</h5>
                             </div>
                             <div class="anime__details__form">
                                 <div class="section-title">
-                                    <h5>Your Comment</h5>
+                                    <h5>Description</h5>
                                 </div>
                                 <form action="#">
-                                    <textarea placeholder="Your Comment"></textarea>
-                                    <button type="submit"><i class="fa fa-location-arrow"></i> Review</button>
+                                    <textarea readOnly={true} value={videoData?.description} style={{fontWeight:'bold',color:'black'}}/>
+                                    
                                 </form>
                             </div>
                         </div>
