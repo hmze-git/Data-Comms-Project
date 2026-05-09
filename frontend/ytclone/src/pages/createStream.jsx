@@ -8,7 +8,7 @@ import Swal from "sweetalert2";
 
 const CreateStreams = () => {
 
-    const user = useContext(AuthContext)
+    const {user} = useContext(AuthContext)
 
     const [streamTile, setStreamTitle] = useState("")
     const [streamKey, setStreamKey] = useState("")
@@ -28,28 +28,26 @@ const CreateStreams = () => {
     };
 
 
-    useEffect(()=>{
+      if (!user) {
+  return <div>Loading...</div>;
+}
 
-        
-
-    },streamKey)
-
-    const generateStreamKey = async () => {
-
+    const generateStreamKey = async (e) => {
+        e.preventDefault()
         try {
 
             const details = {
-                streamTitle:streamTile,
+                title:streamTile,
                 userId:user.id,
-
 
             }
 
             const response = await api.post("/stream/create",details)
 
+            console.log("Stream jey generated ",response.data)
             if(response.data.success){
                 setStreamKey(response.data.StreamKey)
-                setStreamUrl(response.data.streamUrl)
+                setStreamUrl(response.data.streamURL)
 
 
             }
@@ -61,16 +59,71 @@ const CreateStreams = () => {
     }
 
 
+    const displayStreamingInstructions = ()=>{
 
+        return !!streamKey? (
 
-    return (
-        <div className="login spad">
-            <div className="container">
-                <div className="row">
+   <div className="row">
+                    <div className="col">
+                       
+                     <div class="anime__details__review">
+                            <div class="section-title">
+                                <h5>Steps To Start Your Stream</h5>
+                            </div>
+                            <div class="anime__review__item">
+                                <div class="anime__review__item__text">
+                                    <h6>Step 1 </h6>
+                                    <p>Open OBS streaming software and enter settings menu</p>
+                                </div>
+                            </div>
+                            <div class="anime__review__item">
+                                <div class="anime__review__item__text">
+                                    <h6>Step 2 </h6>
+                                    <p>Enter the Stream submenu</p>
+                                </div>
+                            </div>
+                            <div class="anime__review__item">
+                                <div class="anime__review__item__text">
+                                    <h6>Step 3</h6>
+                                    <p>Copy the following link and paste it under the server field within the destination menu <b style={{color:"white"}}>"{streamUrl}"</b></p>
+                                </div>
+                            </div>
+
+                              <div class="anime__review__item">
+                                <div class="anime__review__item__text">
+                                    <h6>Step 4</h6>
+                                    <p>Paste the following under the Stream Key text field <b style={{color:"white"}}>"{streamKey}"</b></p>
+                                </div>
+                            </div>
+
+                              <div class="anime__review__item">
+                                <div class="anime__review__item__text">
+                                    <h6>Step 5</h6>
+                                    <p>Return to the main menu and click start stream to go live</p>
+                                </div>
+
+                               
+                            </div>
+                               <div class="anime__review__item__text">
+                                    <h6>Step 6</h6>
+                                    <p>Return to OBS and click end stream to end your stream</p>
+                                </div>
+                                 
+                      
+                            </div>
+
+                            
+
+                    </div>
+
+                </div>
+
+        ):(
+                 <div className="row">
                     <div className="col">
                         <div className="login__form">
                             <h3>Generate Stream Key</h3>
-                            <form onSubmit={handleSubmit}>
+                            <form onSubmit={generateStreamKey}>
                                 <div className="input__item">
                                     <input type="text" placeholder="Video Title"
                                         onChange={handleTitleChange}
@@ -79,34 +132,27 @@ const CreateStreams = () => {
                                     />
 
                                 </div>
-                                <div className="description__item">
-                                    <textarea
-                                        value={description}
-                                        onChange={handledescriptionChange}
 
-                                    />
-
-                                </div>
-                                <div className="input__item input__item--file">
-                                    <label htmlFor="vidFile">
-                                        <span>{file ? file.name : "Choose video file…"}</span>
-                                    </label>
-                                    <input type="file"
-                                        id="vidFile"
-                                        placeholder="Video File"
-                                        onChange={handleFileChange}
-                                        required={true}
-                                    />
-
-                                </div>
-
-                                <button type="submit" className="site-btn" >Generate StreamKey</button>
+                                <button type="submit" className="site-btn" disabled={!user} >Generate StreamKey</button>
                             </form>
 
                         </div>
                     </div>
 
                 </div>
+        )
+
+    }
+
+
+    return (
+        <div className="login spad">
+            <div className="container">
+
+                {displayStreamingInstructions()}
+
+
+              
             </div>
         </div>
 

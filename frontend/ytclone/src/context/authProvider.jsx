@@ -10,7 +10,7 @@ const AuthProvider = ({children}) =>{
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     useEffect(()=>{
-        const userInfo = JSON.parse(sessionStorage.getItem("User"))
+        const userInfo = JSON.parse(sessionStorage.getItem("user"))
 
         if(userInfo){
             setUser(userInfo)
@@ -32,7 +32,7 @@ const AuthProvider = ({children}) =>{
             const data=resp.data
 
             if(data.success){
-                sessionStorage.setItem("User",JSON.stringify(data.userDetails))
+                sessionStorage.setItem("user",JSON.stringify(data.userDetails))
                 setUser(resp.data.userDetails)
                 setIsLoggedIn(true)
             }
@@ -43,7 +43,7 @@ const AuthProvider = ({children}) =>{
         }
     }
     const logout=()=>{
-    sessionStorage.removeItem("User");
+    sessionStorage.removeItem("user");
     setUser(null);
     setIsLoggedIn(false);
     }

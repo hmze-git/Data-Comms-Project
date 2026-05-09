@@ -31,10 +31,10 @@ class createStreamKey(Resource):
             return({"success":False,"Message":f"Failed to create stream key due to {e}"})
 
 class endStream(Resource):
-    def post(self,streamKey):
+    def post(self):
         try:
 
-  
+            streamKey=request.form.get("name")
 
             stream= StreamModel.query.filter_by(key=streamKey).first()
 
@@ -43,7 +43,7 @@ class endStream(Resource):
         
             stream.status =StreamStatus.INACTIVE
             db.session.commit()
-            return({"Success":True,"message": f"Succesfully updated stream for ID {streamKey}"}),404
+            return({"Success":True,"message": f"Succesfully updated stream for ID {streamKey}"}),200
         except Exception as e:
           return({"Success":False,"message": f"Unable to update stream for ID {streamKey}"}),400
 
@@ -88,10 +88,13 @@ class getStream(Resource):
         return {"Success":True,"Title":stream.title,"urlLiveVid":streamUrl,"streamer":stream.streamer.userName},200
     
 class startStream(Resource):
-   def post(self,streamKey):
+   def post(self):
+    
         try:
 
+            streamKey=request.form.get("name")
 
+            print(f"key is {streamKey}")
             stream= StreamModel.query.filter_by(key=streamKey).first()
 
             if not stream:
@@ -99,7 +102,7 @@ class startStream(Resource):
         
             stream.status =StreamStatus.ACTIVE
             db.session.commit()
-            return({"Success":True,"message": f"Succesfully updated stream for ID {streamKey}"}),404
+            return({"Success":True,"message": f"Succesfully updated stream for ID {streamKey}"}),200
         except Exception as e:
           return({"Success":False,"message": f"Unable to update stream for ID {streamKey}; error {e}"}),400
 
@@ -107,7 +110,7 @@ class startStream(Resource):
 def registerStreamRoutes(api):
 
     api.add_resource(createStreamKey,'/stream/create')
-    api.add_resource(endStream,"/stream/<string:streamKey>/end")
-    api.add_resource(startStream,"/stream/<string:streamKey>/start")
+    api.add_resource(endStream,"/stream/end")
+    api.add_resource(startStream,"/stream/start")
     api.add_resource(getStreams,"/stream/active")
     api.add_resource(getStream,"/stream/<string:streamKey>")
