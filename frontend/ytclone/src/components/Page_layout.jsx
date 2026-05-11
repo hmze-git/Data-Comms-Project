@@ -15,11 +15,11 @@ const Pagelayout = ()=>{
 
     useEffect(()=>{
 
-        if(!isLoggedIn && !isLoading || !user ){
+        if(!isLoading && (!isLoggedIn || !user) ){
             navigation("auth/login",{replace:true})
         }
 
-    },[isLoading,isLoggedIn])
+    },[isLoading,isLoggedIn,user,navigation])
 
     useEffect(()=>{
         if (!!notimsg){
