@@ -14,9 +14,9 @@ const Navbar=()=>{
             <div className="row">
                 <div className="col">
                     <div className="header__logo">
-                        <a href="./index.html">
-                            <b>Priavate media</b>
-                        </a>
+                        <Link to="/">
+                            <b>Private media</b>
+                        </Link>
                     </div>
                 </div>
                 <div className="col-lg-8">
@@ -33,8 +33,7 @@ const Navbar=()=>{
                     </div>
                 </div>
                 <div className="col-lg-2">
-                    <div className="header__right">
-                        <a href="#" className="search-switch"><span className="icon_search"></span></a>
+                    <div className="header__right">  
                         <a href="./login.html"><span className="icon_profile"></span></a>
                     </div>
                 </div>

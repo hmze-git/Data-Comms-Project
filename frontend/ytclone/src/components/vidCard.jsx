@@ -3,9 +3,13 @@ import { Link } from "react-router";
 import {MEDIA_URL} from "../services/mediaURL"
 
 
-const VidCard = ({ vidThumb, vidTitle, vidId, vidUpDate }) => {
+const VidCard = ({ vidThumb, vidTitle, vidId, vidUpDate,vidDuration,uploader }) => {
 
 
+
+    const minutes= Math.floor(vidDuration/60)
+    const seconds= Math.floor(vidDuration-(minutes*60))
+    const formattedSecs=seconds.toString().padStart(2,'0')
     return (
 
    
@@ -18,11 +22,12 @@ const VidCard = ({ vidThumb, vidTitle, vidId, vidUpDate }) => {
                     alt="Video Thumbnail"
                 
                     />
-                    <div className="comment"><i className="fa fa-comments"></i> 11</div>
-                    <div className="view"><i className="fa fa-eye"></i> 9141</div>
+                    <div className="view"><i className="fa fa-eye"></i> {`${minutes}:${formattedSecs}`}</div>
                 </div>
                 <div className="product__item__text">
                     <ul>
+
+                        <li>{uploader}</li>
                         <li>{vidUpDate}</li>
       
                     </ul>

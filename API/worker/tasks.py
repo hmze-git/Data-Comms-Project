@@ -59,6 +59,20 @@ def tanscode_video(objKey,vidId,userId):
             f"{thumb_path}/thumb.jpg",
             ],capture_output=True,text=True)
         
+        result= subprocess.run([
+            'ffprobe',
+            '-v',
+            'error',
+            '-show_entries',
+            'format=duration',
+            '-of', 
+            'default=noprint_wrappers=1:nokey=1',
+            f'{raw_path}/{vidId}.mp4',
+        ],capture_output=True,text=True)
+
+        duration=float(result.stdout.strip())
+        print("DURR ",duration)
+        
         if result.returncode !=0 :
             raise Exception(f"FFmpeg fail: {result.stderr}")
          
@@ -74,7 +88,7 @@ def tanscode_video(objKey,vidId,userId):
         minio_client.fput_object("videos",f"users/{userId}/thumbnail/{vidId}/thumb.jpg",f"{thumb_path}/thumb.jpg")
         update_vidStatus(vidId,
                          "processed",
-                         f"users/{userId}/hsl/{vidId}/index.m3u8",f"users/{userId}/thumbnail/{vidId}/thumb.jpg")
+                         f"users/{userId}/hsl/{vidId}/index.m3u8",f"users/{userId}/thumbnail/{vidId}/thumb.jpg",duration)
 
         os.remove(f"{raw_path}/{vidId}.mp4")
 
@@ -87,11 +101,11 @@ def tanscode_video(objKey,vidId,userId):
         print(f"transcoding failed {e}")
         update_vidStatus(vidId,
                          "failed",
-                         "None","None")
+                         "None","None",0.00)
 
 
 
-def update_vidStatus(vidId,status,hslPath,thumbPath):
+def update_vidStatus(vidId,status,hslPath,thumbPath,duration):
     try:
 
         #ENV should work but if it doesnt
@@ -106,8 +120,8 @@ def update_vidStatus(vidId,status,hslPath,thumbPath):
         cursor = connection.cursor(dictionary=True)
 
         cursor.execute(
-            "UPDATE video  SET upload_status=%s, hslPath=%s, thumbnailPath=%s WHERE id=%s ",
-            (status,hslPath,thumbPath,vidId)
+            "UPDATE video  SET upload_status=%s, hslPath=%s, thumbnailPath=%s, duration=%s WHERE id=%s ",
+            (status,hslPath,thumbPath,duration,vidId)
         )
         connection.commit()
      

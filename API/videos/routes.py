@@ -101,10 +101,10 @@ class getVideos(Resource):
 
 
     def get(self):
-        pageNum=int(request.args.get("page_num",1))
-        limit=int(request.args.get("limit",10))
+        pageNum=int(request.args.get("page_num"))
+        limit=int(request.args.get("limit"))
 
-        pagination=VideoModel.query.with_entities(VideoModel.id,VideoModel.title,VideoModel.thumbnailPath,VideoModel.upload_date). \
+        pagination=VideoModel.query.\
         filter_by(upload_status="PROCESSED") \
         .order_by(VideoModel.upload_date.desc()) \
         .paginate(page=pageNum,per_page=limit,error_out=False)
@@ -113,7 +113,9 @@ class getVideos(Resource):
             "vidId": v.id,
             "vidTitle": v.title,
             "vidThumb": f'videos/{v.thumbnailPath}',
-            "vidUpload": v.upload_date.isoformat()
+            "vidUpload": v.upload_date.isoformat(),
+            "uploaderName":v.uploader.userName,
+            "vidDuration":v.duration,
         }
             for v in pagination.items
         ]

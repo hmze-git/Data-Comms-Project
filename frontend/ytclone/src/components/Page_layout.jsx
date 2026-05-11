@@ -33,7 +33,6 @@ const Pagelayout = ()=>{
         <div>
             <Navbar/>
 
-            <h1>Redered some bs</h1>
 
             <Outlet/>
 
