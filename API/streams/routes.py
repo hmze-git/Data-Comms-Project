@@ -3,7 +3,7 @@ from flask import request,jsonify
 from Extensions.extensions import db
 from models.streamModel import StreamModel,StreamStatus
 from models.userModel import UserModel
-import uuid
+from mosquitto.publisher import publish_noti
 
 
 class createStreamKey(Resource):
@@ -102,7 +102,11 @@ class startStream(Resource):
         
             stream.status =StreamStatus.ACTIVE
             db.session.commit()
+            publish_noti(f"{stream.streamer.userName} has started streaming {stream.title}")
             return({"Success":True,"message": f"Succesfully updated stream for ID {streamKey}"}),200
+        
+
+        
         except Exception as e:
           return({"Success":False,"message": f"Unable to update stream for ID {streamKey}; error {e}"}),400
 

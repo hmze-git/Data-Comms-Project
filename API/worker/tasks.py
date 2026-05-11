@@ -1,9 +1,10 @@
 from .celery_app import celery #import the established celery connection to reddis 
 from  Extensions.extensions import minio_client
-from models.videoModel import VideoModel
+
 import os
 import subprocess
 import mysql.connector
+from mosquitto.publisher import publish_noti
 
 
 
@@ -102,15 +103,23 @@ def update_vidStatus(vidId,status,hslPath,thumbPath):
             password=os.getenv("DB_PASS","Pass"),
             database=os.getenv("DB_NAME","dbdatacoms"),
         )
-        cursor = connection.cursor()
+        cursor = connection.cursor(dictionary=True)
 
         cursor.execute(
             "UPDATE video  SET upload_status=%s, hslPath=%s, thumbnailPath=%s WHERE id=%s ",
             (status,hslPath,thumbPath,vidId)
         )
         connection.commit()
+     
+        cursor.execute("SELECT * FROM user u INNER JOIN video v ON u.id=v.uploaded_by where v.id=%s",(vidId,))
+
+        video = cursor.fetchone()
+
+        userName=video["userName"]
+        title=video["title"]
+        publish_noti(f"{userName} has uploaded video {title}")
         connection.close()
-       
+   
     except Exception as e:
         print(f'Failed db vid update : {e}')
 

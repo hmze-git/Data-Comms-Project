@@ -8,6 +8,6 @@ def publish_noti(msg):
         client.connect("mosquitto",1883) #change on deply
         client.publish("notifications",msg)
         client.disconnect()
-        
+        print(f"Publishing msg {msg}")
     except Exception as e:
         print(f"Mosquitto Failed: {e}")
