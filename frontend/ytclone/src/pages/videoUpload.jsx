@@ -5,6 +5,7 @@ import api from "../services/api";
 import Swal from "sweetalert2"
 
 
+
 const VideoUpload = ()=>{
 
      const { user} = useContext(AuthContext);
@@ -12,11 +13,9 @@ const VideoUpload = ()=>{
     const [file, setFile] = useState();
     const [description, setDescription] = useState("");
     const [uploadComplete,setUploadComplete]=useState(false);
-    const [isUploaded,setIsUploaded]= useState(false)
+    const [isUploaded,setIsUploaded]= useState(false);
 
     const userId = user?.id;
-    
-    
     
 
 
