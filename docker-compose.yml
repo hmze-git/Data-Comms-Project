@@ -59,7 +59,9 @@ services:
       - minio_data:/data
   nginx:
    
-    build: ./NGINX
+    build: 
+      context: .
+      dockerfile: ./NGINX/Dockerfile
     ports:
       - "80:80"
       - "1935:1935"

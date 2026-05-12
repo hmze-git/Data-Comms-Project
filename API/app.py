@@ -7,7 +7,7 @@ from flask_cors import CORS
 def create_app():
     app = Flask(__name__)
 
-    CORS(app,origins=["http://localhost:5173"])
+    CORS(app,origins=["http://localhost:5173","http://localhost"])
     Upload_Foulder='uploads'
     app.config['SQLALCHEMY_DATABASE_URI']='mysql+pymysql://root:Pass@db:3306/dbdatacoms'
     app.config['UPLOAD FOLDER']=Upload_Foulder
